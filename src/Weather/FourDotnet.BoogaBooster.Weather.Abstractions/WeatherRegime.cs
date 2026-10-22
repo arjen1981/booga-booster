@@ -13,4 +13,10 @@ public enum WeatherRegime
 
     /// <summary>A user-triggered strong-wind event is active.</summary>
     StrongWind = 2,
+
+    /// <summary>
+    /// A user-summoned Godzilla event is active. Appended so the numeric values of the
+    /// existing members stay stable for clients that receive the regime as a number.
+    /// </summary>
+    Godzilla = 3,
 }

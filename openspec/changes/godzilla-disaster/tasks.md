@@ -7,7 +7,7 @@ agent. Backend paths are under `src/`, frontend paths under
 
 ## 1. Weather domain
 
-- [ ] 1.1 Append `Godzilla = 3` to `WeatherRegime` and add `GodzillaDuration` (3 min) plus the `ProfileFor(Godzilla) => Calm` case to `WeatherDefaults`; verify the solution builds and existing Weather tests still pass
+- [x] 1.1 Append `Godzilla = 3` to `WeatherRegime` and add `GodzillaDuration` (3 min) plus the `ProfileFor(Godzilla) => Calm` case to `WeatherDefaults`; verify the solution builds and existing Weather tests still pass
 - [ ] 1.2 Add `Weather.StartGodzilla()` (sets regime and duration, replaces an active event); verify with domain tests that the regime becomes `Godzilla`, the countdown starts, it replaces strong wind, it is still active just before 3 min and returns to `Calm` after 3 min, and readings drift toward the calm defaults
 - [ ] 1.3 Make `ToConditionDto()` report `NiceWeather = 0` while the regime is `Godzilla`; verify with tests that it is exactly 0 with calm readings and recomputes to 1 after Godzilla leaves at calm defaults
 

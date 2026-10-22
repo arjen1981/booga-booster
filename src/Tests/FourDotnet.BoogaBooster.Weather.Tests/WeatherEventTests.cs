@@ -129,4 +129,22 @@ public sealed class WeatherEventTests
         Assert.True(Math.Abs(conditions.TemperatureCelsius - WeatherDefaults.DefaultTemperatureCelsius) <= 1d,
             $"Temperature did not revert near the default, was {conditions.TemperatureCelsius}.");
     }
+
+    [Fact]
+    public void Godzilla_is_appended_to_the_regimes_so_existing_numeric_values_stay_stable()
+    {
+        // The frontend maps numeric payloads by index, so the order is part of the contract.
+        Assert.Equal(0, (int)WeatherRegime.Calm);
+        Assert.Equal(1, (int)WeatherRegime.Precipitation);
+        Assert.Equal(2, (int)WeatherRegime.StrongWind);
+        Assert.Equal(3, (int)WeatherRegime.Godzilla);
+    }
+
+    [Fact]
+    public void Godzilla_pulls_the_readings_toward_the_calm_profile()
+    {
+        Assert.Equal(
+            WeatherDefaults.ProfileFor(WeatherRegime.Calm),
+            WeatherDefaults.ProfileFor(WeatherRegime.Godzilla));
+    }
 }

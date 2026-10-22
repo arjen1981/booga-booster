@@ -26,6 +26,9 @@ public static class WeatherDefaults
     /// <summary>A strong-wind event lasts up to about 10 minutes.</summary>
     public static readonly TimeSpan StrongWindDuration = TimeSpan.FromMinutes(10);
 
+    /// <summary>A Godzilla event lasts about 3 minutes, after which Godzilla leaves.</summary>
+    public static readonly TimeSpan GodzillaDuration = TimeSpan.FromMinutes(3);
+
     // --- Drift tuning ---
     /// <summary>Fraction of the gap to the target closed each tick (mean-reversion).</summary>
     public const double ReversionFraction = 0.25d;
@@ -73,6 +76,9 @@ public static class WeatherDefaults
     {
         WeatherRegime.Precipitation => Precipitation,
         WeatherRegime.StrongWind => StrongWind,
+
+        // Godzilla is not weather: the readings keep drifting toward the calm defaults.
+        WeatherRegime.Godzilla => Calm,
         _ => Calm,
     };
 }
