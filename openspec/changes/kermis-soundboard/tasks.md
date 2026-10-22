@@ -35,6 +35,6 @@ PrimeNG markup or configuration.
 
 ## 6. Verification
 
-- [ ] 6.1 Run `npm test` and `npm run build` from the app folder; verify all specs pass and the build has no new warnings
-- [ ] 6.2 Run the app (`npm start` or the Aspire AppHost) and check in a browser at ≥ 1024 px and at ~375 px: soundboard is one thin row under the 3D view, buttons wrap on narrow widths without horizontal scroll, each sound plays, switching/stopping works, credits popover opens and closes with Escape, existing panels look unchanged
-- [ ] 6.3 Run `openspec validate kermis-soundboard --strict` and verify it passes
+- [x] 6.1 Run `npm test` and `npm run build` from the app folder; verify all specs pass and the build has no new warnings
+- [x] 6.2 Run the app (`npm start` or the Aspire AppHost) and check in a browser at ≥ 1024 px and at ~375 px: soundboard is one thin row under the 3D view, buttons wrap on narrow widths without horizontal scroll, each sound plays, switching/stopping works, credits popover opens and closes with Escape, existing panels look unchanged
+- [x] 6.3 Run `openspec validate kermis-soundboard --strict` and verify it passes
