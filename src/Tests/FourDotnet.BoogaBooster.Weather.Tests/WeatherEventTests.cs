@@ -147,4 +147,88 @@ public sealed class WeatherEventTests
             WeatherDefaults.ProfileFor(WeatherRegime.Calm),
             WeatherDefaults.ProfileFor(WeatherRegime.Godzilla));
     }
+
+    [Fact]
+    public void Summoning_godzilla_activates_the_regime_and_starts_its_countdown()
+    {
+        var weather = WeatherModel.CreateDefault();
+
+        weather.StartGodzilla();
+
+        Assert.Equal(WeatherRegime.Godzilla, weather.Regime);
+        Assert.Equal(WeatherDefaults.GodzillaDuration, weather.RemainingEventDuration);
+    }
+
+    [Fact]
+    public void Summoning_godzilla_replaces_an_active_strong_wind_and_starts_from_its_beginning()
+    {
+        var weather = WeatherModel.CreateDefault();
+        weather.StartStrongWind();
+        weather.Advance(Tick, ConstantSampler.Zero);
+
+        weather.StartGodzilla();
+
+        Assert.Equal(WeatherRegime.Godzilla, weather.Regime);
+        Assert.Equal(WeatherDefaults.GodzillaDuration, weather.RemainingEventDuration);
+    }
+
+    [Fact]
+    public void Godzilla_is_still_present_one_tick_before_its_duration_ends()
+    {
+        var weather = WeatherModel.CreateDefault();
+        weather.StartGodzilla();
+
+        var ticksBeforeLeaving = (int)(WeatherDefaults.GodzillaDuration / Tick) - 1;
+        for (var i = 0; i < ticksBeforeLeaving; i++)
+        {
+            weather.Advance(Tick, ConstantSampler.Zero);
+        }
+
+        Assert.Equal(WeatherRegime.Godzilla, weather.Regime);
+        Assert.Equal(Tick, weather.RemainingEventDuration);
+    }
+
+    [Fact]
+    public void Godzilla_leaves_and_the_regime_returns_to_calm_once_its_duration_elapses()
+    {
+        var weather = WeatherModel.CreateDefault();
+        weather.StartGodzilla();
+
+        var ticksUntilLeaving = (int)(WeatherDefaults.GodzillaDuration / Tick);
+        for (var i = 0; i < ticksUntilLeaving; i++)
+        {
+            weather.Advance(Tick, ConstantSampler.Zero);
+        }
+
+        Assert.Equal(WeatherRegime.Calm, weather.Regime);
+        Assert.Equal(TimeSpan.Zero, weather.RemainingEventDuration);
+    }
+
+    [Fact]
+    public void During_godzilla_readings_drift_toward_the_calm_defaults_rather_than_the_storm()
+    {
+        var weather = WeatherModel.CreateDefault();
+        weather.StartStrongWind();
+        for (var i = 0; i < 10; i++)
+        {
+            weather.Advance(Tick, ConstantSampler.Zero);
+        }
+
+        var stormy = weather.ToConditionDto();
+
+        weather.StartGodzilla();
+        for (var i = 0; i < 5; i++)
+        {
+            weather.Advance(Tick, ConstantSampler.Zero);
+        }
+
+        var conditions = weather.ToConditionDto();
+        Assert.True(conditions.WindBeaufort < stormy.WindBeaufort,
+            $"Expected wind to ease from {stormy.WindBeaufort}, was {conditions.WindBeaufort}.");
+        Assert.True(conditions.SunshinePercent > stormy.SunshinePercent,
+            $"Expected sunshine to return from {stormy.SunshinePercent}, was {conditions.SunshinePercent}.");
+        Assert.True(conditions.TemperatureCelsius > stormy.TemperatureCelsius,
+            $"Expected temperature to recover from {stormy.TemperatureCelsius}, was {conditions.TemperatureCelsius}.");
+        Assert.Equal(PrecipitationType.None, conditions.Precipitation);
+    }
 }

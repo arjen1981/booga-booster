@@ -127,6 +127,18 @@ public sealed class Weather : DomainModel
     }
 
     /// <summary>
+    /// Summons Godzilla. The regime becomes <see cref="WeatherRegime.Godzilla"/> for
+    /// about 3 minutes, replacing any active event, after which it returns to
+    /// <see cref="WeatherRegime.Calm"/>. Godzilla is not weather: the readings keep
+    /// drifting toward the calm defaults.
+    /// </summary>
+    public void StartGodzilla()
+    {
+        Regime = WeatherRegime.Godzilla;
+        RemainingEventDuration = WeatherDefaults.GodzillaDuration;
+    }
+
+    /// <summary>
     /// Advances the simulation by <paramref name="elapsed"/>: expires any active
     /// event, then nudges every reading a fraction of the way toward the active
     /// regime's target plus a small bounded random sample.
