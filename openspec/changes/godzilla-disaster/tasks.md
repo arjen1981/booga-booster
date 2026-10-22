@@ -26,7 +26,7 @@ agent. Backend paths are under `src/`, frontend paths under
 
 - [x] 4.1 Add `'Godzilla'` to the `WeatherRegime` type and `REGIME_BY_INDEX`, `regimeLabel` → "Godzilla", and `sceneFor` → `kind: 'godzilla'`; verify with `weather.models.spec.ts` (index 3 and the string both map to `Godzilla`, label, scene kind)
 - [x] 4.2 Add `startGodzilla()` to `WeatherSource`, `HttpWeatherSource` (`POST /api/weather/godzilla` then refresh) and `FakeWeatherSource` (`godzillaCalls`); verify with `http-weather-source.spec.ts`
-- [ ] 4.3 Add the `godzillaPending` signal and `startGodzilla()` to `WeatherStateService` using the existing `run(...)` helper; verify with `weather-state.service.spec.ts` (pending while in flight, error message on failure)
+- [x] 4.3 Add the `godzillaPending` signal and `startGodzilla()` to `WeatherStateService` using the existing `run(...)` helper; verify with `weather-state.service.spec.ts` (pending while in flight, error message on failure)
 - [ ] 4.4 Add the third "Summon Godzilla" button to `weather-disturbance-controls` and switch the grid to `repeat(auto-fit, minmax(6.5rem, 1fr))`; verify with `weather-disturbance-controls.spec.ts` (calls the source, pending/disabled/aria-busy, failure message) and `weather-panel.a11y.spec.ts`
 - [ ] 4.5 Add the `godzilla` scene to `weather-conditions-view` (decorative silhouette + backdrop shake, off under reduced motion); verify with `weather-conditions-view.spec.ts` that `data-kind="godzilla"` renders the silhouette inside the `aria-hidden` scene
 

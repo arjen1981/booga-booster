@@ -55,6 +55,27 @@ describe('WeatherStateService', () => {
     expect(service.strongWindPending()).toBe(false);
   });
 
+  it('records a Godzilla disturbance and reports it pending while in flight', async () => {
+    source.hold = true;
+
+    const done = service.startGodzilla();
+    expect(service.godzillaPending()).toBe(true);
+
+    source.release();
+    await done;
+    expect(source.godzillaCalls).toBe(1);
+    expect(service.godzillaPending()).toBe(false);
+  });
+
+  it('surfaces an error message when a Godzilla request fails', async () => {
+    source.failNext = true;
+
+    await service.startGodzilla();
+
+    expect(service.errorMessage()).not.toBeNull();
+    expect(service.godzillaPending()).toBe(false);
+  });
+
   it('surfaces an error message when a disturbance fails', async () => {
     source.failNext = true;
 

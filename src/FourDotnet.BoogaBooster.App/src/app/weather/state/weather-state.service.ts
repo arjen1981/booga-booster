@@ -58,6 +58,7 @@ export class WeatherStateService {
 
   private readonly precipitationPendingSignal = signal(false);
   private readonly strongWindPendingSignal = signal(false);
+  private readonly godzillaPendingSignal = signal(false);
   private readonly errorMessageSignal = signal<string | null>(null);
 
   /** Whether a precipitation request is in flight. */
@@ -65,6 +66,9 @@ export class WeatherStateService {
 
   /** Whether a strong-wind request is in flight. */
   readonly strongWindPending = this.strongWindPendingSignal.asReadonly();
+
+  /** Whether a Godzilla request is in flight. */
+  readonly godzillaPending = this.godzillaPendingSignal.asReadonly();
 
   /** The most recent disturbance failure message, or `null`. */
   readonly errorMessage = this.errorMessageSignal.asReadonly();
@@ -82,6 +86,11 @@ export class WeatherStateService {
   /** Start a strong-wind event. */
   async startStrongWind(): Promise<void> {
     await this.run(this.strongWindPendingSignal, () => this.source.startStrongWind());
+  }
+
+  /** Summon Godzilla. */
+  async startGodzilla(): Promise<void> {
+    await this.run(this.godzillaPendingSignal, () => this.source.startGodzilla());
   }
 
   private async run(pending: WritableSignal<boolean>, action: () => Promise<void>): Promise<void> {
