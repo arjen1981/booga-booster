@@ -1,6 +1,7 @@
 import {
   normalizePrecipitation,
   normalizeRegime,
+  regimeLabel,
   sceneFor,
   summaryText,
   toWeatherConditions,
@@ -14,12 +15,14 @@ describe('weather.models', () => {
       expect(normalizePrecipitation(3)).toBe('Hail');
       expect(normalizeRegime(2)).toBe('StrongWind');
       expect(normalizeRegime(0)).toBe('Calm');
+      expect(normalizeRegime(3)).toBe('Godzilla');
     });
 
     it('passes string precipitation and regime through (case-insensitive)', () => {
       expect(normalizePrecipitation('Snow')).toBe('Snow');
       expect(normalizePrecipitation('rain')).toBe('Rain');
       expect(normalizeRegime('StrongWind')).toBe('StrongWind');
+      expect(normalizeRegime('godzilla')).toBe('Godzilla');
     });
 
     it('falls back for unknown values', () => {
@@ -71,6 +74,20 @@ describe('weather.models', () => {
           niceWeather: 0.3,
         }).kind,
       ).toBe('snow');
+    });
+
+    it('labels the Godzilla regime and gives it its own scene before precipitation', () => {
+      expect(regimeLabel('Godzilla')).toBe('Godzilla');
+      expect(
+        sceneFor({
+          temperatureCelsius: 20,
+          windBeaufort: 2,
+          sunshinePercent: 70,
+          precipitation: 'Rain',
+          regime: 'Godzilla',
+          niceWeather: 0,
+        }).kind,
+      ).toBe('godzilla');
     });
 
     it('summarizes conditions in words', () => {

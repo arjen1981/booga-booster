@@ -2,7 +2,7 @@
 export type PrecipitationType = 'None' | 'Rain' | 'Snow' | 'Hail';
 
 /** The active weather regime driving the simulation. */
-export type WeatherRegime = 'Calm' | 'Precipitation' | 'StrongWind';
+export type WeatherRegime = 'Calm' | 'Precipitation' | 'StrongWind' | 'Godzilla';
 
 /** Normalized current weather conditions used across the UI. */
 export interface WeatherConditions {
@@ -30,13 +30,16 @@ export interface WeatherConditionDto {
 
 /** A descriptor the panel uses to drive the animated scene. */
 export interface WeatherScene {
-  readonly kind: 'calm' | 'rain' | 'snow' | 'hail' | 'wind';
+  readonly kind: 'calm' | 'rain' | 'snow' | 'hail' | 'wind' | 'godzilla';
   readonly sunshinePercent: number;
   readonly niceWeather: number;
 }
 
 const PRECIPITATION_BY_INDEX: readonly PrecipitationType[] = ['None', 'Rain', 'Snow', 'Hail'];
-const REGIME_BY_INDEX: readonly WeatherRegime[] = ['Calm', 'Precipitation', 'StrongWind'];
+const REGIME_BY_INDEX: readonly WeatherRegime[] = ['Calm', 'Precipitation',
+  'StrongWind',
+  'Godzilla',
+];
 
 /** Beaufort scale short descriptions, index = Beaufort number (0–12). */
 const BEAUFORT_DESCRIPTIONS: readonly string[] = [
@@ -102,6 +105,8 @@ export function regimeLabel(regime: WeatherRegime): string {
       return 'Precipitation';
     case 'StrongWind':
       return 'Strong wind';
+    case 'Godzilla':
+      return 'Godzilla';
     default:
       return 'Calm';
   }
@@ -138,6 +143,9 @@ export function sceneFor(conditions: WeatherConditions | null): WeatherScene {
     niceWeather: conditions.niceWeather,
   };
 
+  if (conditions.regime === 'Godzilla') {
+    return { kind: 'godzilla', ...base };
+  }
   if (conditions.regime === 'StrongWind') {
     return { kind: 'wind', ...base };
   }
