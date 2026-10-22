@@ -16,7 +16,7 @@ agent. Backend paths are under `src/`, frontend paths under
 - [x] 2.1 Add `StartGodzilla()` to `IWeatherStore` / `WeatherStore` (returns `Changed: true` and the snapshot, under the lock); verify with a store test
 - [x] 2.2 Add `Features/StartGodzilla/` (`StartGodzillaCommand`, `StartGodzillaCommandHandler` implementing `ExecuteAsync`, `EnrichActivity` tagging the regime) and `WeatherTelemetryAttributes.GodzillaDisturbance = "godzilla"`; verify with handler tests that it starts Godzilla, publishes a snapshot with regime `Godzilla` and `NiceWeather` 0, and records the disturbance counter with kind `godzilla`
 - [x] 2.3 Register the handler in `AddWeatherModule()` and map `POST /weather/godzilla` → `202` in `WeatherEndpoints`; verify with the module-registration test that the handler resolves, and with an endpoint test (or `WebApplicationFactory`-style test if the module tests support it) that the route returns `202` and `GET /weather` then reports `Godzilla`
-- [ ] 2.4 Run `dotnet test` for the Weather and Queue test projects and check Weather line coverage stays ≥ 80 % (the `test-coverage` skill); verify both pass
+- [x] 2.4 Run `dotnet test` for the Weather and Queue test projects and check Weather line coverage stays ≥ 80 % (the `test-coverage` skill); verify both pass
 
 ## 3. Model asset
 
