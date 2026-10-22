@@ -13,7 +13,7 @@ PrimeNG markup or configuration.
 
 ## 2. PrimeNG setup
 
-- [ ] 2.1 Add `providePrimeNG` with the Aura preset, `cssLayer: true` and a `definePreset` mapping the primary colour to the dashboard accent in `src/app/app.config.ts`; verify `npm run build` succeeds and the existing dashboard specs (incl. `ride-dashboard.a11y.spec.ts`) still pass
+- [x] 2.1 Add `providePrimeNG` with the Aura preset, `cssLayer: true` and a `definePreset` mapping the primary colour to the dashboard accent in `src/app/app.config.ts`; verify `npm run build` succeeds and the existing dashboard specs (incl. `ride-dashboard.a11y.spec.ts`) still pass
 
 ## 3. Soundboard logic
 
