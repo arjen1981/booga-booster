@@ -26,8 +26,9 @@ export const appConfig: ApplicationConfig = {
           // PrimeNG styles live in a cascade layer so the app's own (unlayered)
           // styles always win and the hand-rolled panels look unchanged.
           cssLayer: true,
-          // The dashboard is permanently dark.
-          darkModeSelector: ':root',
+          // The dashboard is permanently dark: index.html sets this class on
+          // <html> and it is never removed (':root' does not activate dark mode).
+          darkModeSelector: '.bb-dark',
         },
       },
     }),

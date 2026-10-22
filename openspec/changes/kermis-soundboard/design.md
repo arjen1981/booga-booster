@@ -118,7 +118,8 @@ Add `providePrimeNG({ theme: { preset: Aura, options: { darkModeSelector: … ,
 cssLayer: true } } })` to `app.config.ts`. `cssLayer` puts PrimeNG's CSS in a cascade layer
 so the app's existing styles win and current panels are unaffected. The preset lives in
 `src/app/theme/boogabooster-preset.ts` (`definePreset(Aura, …)` with the primary palette
-generated from the dashboard accent `#4aa3ff`), and `darkModeSelector: ':root'` keeps PrimeNG
+generated from the dashboard accent `#4aa3ff`), and `darkModeSelector: '.bb-dark'` — a class set on
+`<html>` in `index.html` and never removed — keeps PrimeNG
 permanently dark like the dashboard. This adds ~185 kB to the initial bundle (now ~444 kB,
 under the 500 kB warning budget). Consult the `primeng` MCP server for the exact v22 API before writing it.
 
