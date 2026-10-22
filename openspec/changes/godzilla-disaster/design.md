@@ -164,3 +164,23 @@ like the existing `boogabooster.fbx`.
   `development`.
 - [Queue appears unaffected for a while] → by design arrivals stop but the existing queue
   drains at the ride's pace; the panel's nice-weather meter at 0 makes the cause visible.
+
+## Implementation notes
+
+Decisions refined during `/opsx:apply` (behaviour unchanged unless stated):
+
+- **D3.** The zero comes from a named `WeatherNiceness.NotNice` constant via a private
+  `Weather.CalculateNiceWeather()`, not a bare literal.
+- **D4.** `StartGodzillaCommandHandler.EnrichActivity` tags the regime and the resulting
+  nice-weather value (what Godzilla affects) instead of the wind that StartStrongWind tags.
+  No HTTP endpoint test was added: the Weather test project has no HTTP test
+  infrastructure; the route is covered by module registration plus a manual check against
+  the running API (`POST /weather/godzilla` → 202, regime 3, `niceWeather` 0).
+- **D6.** The dashboard exposes a `godzillaPresent` computed signal and binds
+  `[godzillaPresent]="godzillaPresent()"` rather than an inline template expression.
+- **D7.** If the regime ends while the model is still loading, the actor goes straight to
+  `absent` when the load lands (nothing was visible yet). Reversing mid-walk continues from
+  the current spot via a pure `reversedElapsed(phase, t)` helper; the heading flips rather
+  than turning smoothly. The Punch "roar" plays every 6 s, fading Idle out and back in.
+- **D5.** The weather-panel shake moves the whole `.scene` box 1–2 px, as the scene has no
+  separate backdrop element.
