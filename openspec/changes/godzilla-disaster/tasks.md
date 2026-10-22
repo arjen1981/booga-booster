@@ -20,7 +20,7 @@ agent. Backend paths are under `src/`, frontend paths under
 
 ## 3. Model asset
 
-- [ ] 3.1 Download the CC0 *Dino* GLB from Poly Pizza (`https://static.poly.pizza/1c1ae302-b948-4de4-961a-44f762b722cf.glb`) to `public/3dmodels/godzilla.glb` unmodified and add `public/3dmodels/CREDITS.md` (title, author Quaternius, source URL `https://poly.pizza/m/wuerCFCWNR`, CC0); verify the file is ~404 KB and lists the `Walk`, `Idle` and `Punch` animations
+- [x] 3.1 Download the CC0 *Dino* GLB from Poly Pizza (`https://static.poly.pizza/1c1ae302-b948-4de4-961a-44f762b722cf.glb`) to `public/3dmodels/godzilla.glb` unmodified and add `public/3dmodels/CREDITS.md` (title, author Quaternius, source URL `https://poly.pizza/m/wuerCFCWNR`, CC0); verify the file is ~404 KB and lists the `Walk`, `Idle` and `Punch` animations
 
 ## 4. Frontend weather plumbing
 
