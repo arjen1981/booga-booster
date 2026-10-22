@@ -6,10 +6,10 @@ PrimeNG markup or configuration.
 
 ## 1. Audio assets
 
-- [ ] 1.1 Download the Freesound HQ previews of #203424, #352980, #263142 and #353221 to a scratch directory (not the repo) and verify each file plays and matches the title/author on its Freesound page
-- [ ] 1.2 Run an ffmpeg loudness scan (`ebur128`/`astats`, via Docker or a local ffmpeg) over Draaiorgel, Booster and Kamelenrace and record the chosen ~12 s excerpt start for each (loudest window; a melodic phrase for the organ); Kermis is used whole — verify the offsets are written down
-- [ ] 1.3 Cut, normalise (loudnorm I=−16), fade 0.3 s in/out, downmix to mono and encode 96 kbit/s 44.1 kHz MP3 into `public/sounds/{draaiorgel,booster,kamelenrace,kermis}.mp3`; verify with `ffprobe` that each is ≤ 15 s and the four total ≤ 1 MB
-- [ ] 1.4 Write `public/sounds/CREDITS.md` listing for each clip: source title, author, Freesound URL, licence (CC BY 4.0), excerpt start/length and the ffmpeg command used; verify all four entries are complete
+- [x] 1.1 Download the Freesound HQ previews of #203424, #352980, #263142 and #353221 to a scratch directory (not the repo) and verify each file plays and matches the title/author on its Freesound page
+- [x] 1.2 Run an ffmpeg loudness scan (`ebur128`/`astats`, via Docker or a local ffmpeg) over Draaiorgel, Booster and Kamelenrace and record the chosen ~12 s excerpt start for each (loudest window; a melodic phrase for the organ); Kermis is used whole — verify the offsets are written down
+- [x] 1.3 Cut, normalise (loudnorm I=−16), fade 0.3 s in/out, downmix to mono and encode 96 kbit/s 44.1 kHz MP3 into `public/sounds/{draaiorgel,booster,kamelenrace,kermis}.mp3`; verify with `ffprobe` that each is ≤ 15 s and the four total ≤ 1 MB
+- [x] 1.4 Write `public/sounds/CREDITS.md` listing for each clip: source title, author, Freesound URL, licence (CC BY 4.0), excerpt start/length and the ffmpeg command used; verify all four entries are complete
 
 ## 2. PrimeNG setup
 
