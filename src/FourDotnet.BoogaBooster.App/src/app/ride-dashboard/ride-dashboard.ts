@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 
 import { OperationControls } from './controls/operation-controls';
 import { GondolaPanel } from './panels/gondola-panel/gondola-panel';
@@ -9,6 +9,7 @@ import { RideLifecycleService } from './state/ride-lifecycle.service';
 import { RideStateService } from './state/ride-state.service';
 import { RideVisualization } from './visualization/ride-visualization';
 import { QueuePanel } from '../queue/queue-panel/queue-panel';
+import { WeatherStateService } from '../weather/state/weather-state.service';
 import { WeatherPanel } from '../weather/weather-panel/weather-panel';
 
 /**
@@ -35,4 +36,10 @@ import { WeatherPanel } from '../weather/weather-panel/weather-panel';
 export class RideDashboard {
   protected readonly ride = inject(RideStateService);
   protected readonly lifecycle = inject(RideLifecycleService);
+  private readonly weather = inject(WeatherStateService);
+
+  /** Whether the weather regime currently calls for Godzilla beside the ride. */
+  protected readonly godzillaPresent = computed(
+    () => this.weather.conditions()?.regime === 'Godzilla',
+  );
 }
