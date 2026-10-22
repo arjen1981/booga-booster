@@ -55,6 +55,16 @@ describe('WeatherConditionsView', () => {
     expect(el.querySelector('.scene')?.getAttribute('data-kind')).toBe('wind');
   });
 
+  it('renders a decorative Godzilla silhouette inside the aria-hidden scene', () => {
+    const el = render(createConditions({ regime: 'Godzilla', niceWeather: 0 }), 'ready');
+
+    const scene = el.querySelector('.scene');
+    expect(scene?.getAttribute('aria-hidden')).toBe('true');
+    expect(scene?.getAttribute('data-kind')).toBe('godzilla');
+    expect(scene?.querySelector('.kaiju')).not.toBeNull();
+    expect(el.textContent).toContain('Godzilla');
+  });
+
   it('shows an unavailable state on error', () => {
     const el = render(null, 'error');
 

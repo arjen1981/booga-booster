@@ -45,6 +45,10 @@ import {
             </span>
           }
 
+          @if (scene().kind === 'godzilla') {
+            <span class="kaiju"></span>
+          }
+
           @if (scene().kind === 'wind') {
             <span class="streaks">
               @for (s of streaks; track s) {
