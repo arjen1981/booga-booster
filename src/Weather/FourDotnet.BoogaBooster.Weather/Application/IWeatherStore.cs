@@ -26,4 +26,7 @@ public interface IWeatherStore
 
     /// <summary>Begins a strong-wind event.</summary>
     WeatherMutationResult StartStrongWind();
+
+    /// <summary>Summons Godzilla.</summary>
+    WeatherMutationResult StartGodzilla();
 }

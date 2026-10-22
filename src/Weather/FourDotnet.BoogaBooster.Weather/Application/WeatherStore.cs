@@ -56,4 +56,13 @@ public sealed class WeatherStore : IWeatherStore
             return new WeatherMutationResult(Changed: true, _weather.ToConditionDto());
         }
     }
+
+    public WeatherMutationResult StartGodzilla()
+    {
+        lock (_gate)
+        {
+            _weather.StartGodzilla();
+            return new WeatherMutationResult(Changed: true, _weather.ToConditionDto());
+        }
+    }
 }

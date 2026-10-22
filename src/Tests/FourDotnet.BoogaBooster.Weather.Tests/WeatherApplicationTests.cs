@@ -71,4 +71,19 @@ public sealed class WeatherApplicationTests
         await Assert.ThrowsAsync<ArgumentNullException>(
             () => publisher.PublishAsync(null!, CancellationToken.None));
     }
+
+    [Fact]
+    public void Store_StartGodzilla_ReportsAChange_AndReturnsTheGodzillaSnapshot()
+    {
+        var store = new WeatherStore(ConstantSampler.Zero);
+
+        var result = store.StartGodzilla();
+
+        Assert.True(result.Changed);
+        Assert.Equal(WeatherRegime.Godzilla, result.Snapshot.Regime);
+        Assert.Equal(0f, result.Snapshot.NiceWeather);
+
+        // The returned snapshot is the store's state, not a stale copy.
+        Assert.Equal(store.GetSnapshot(), result.Snapshot);
+    }
 }
