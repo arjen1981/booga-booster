@@ -3,6 +3,7 @@ using FourDotnet.BoogaBooster.Weather.Abstractions;
 using FourDotnet.BoogaBooster.Weather.Application;
 using FourDotnet.BoogaBooster.Weather.Domain;
 using FourDotnet.BoogaBooster.Weather.Features.GetWeather;
+using FourDotnet.BoogaBooster.Weather.Features.StartGodzilla;
 using FourDotnet.BoogaBooster.Weather.Features.StartPrecipitation;
 using FourDotnet.BoogaBooster.Weather.Features.StartStrongWind;
 using Microsoft.Extensions.DependencyInjection;
@@ -45,6 +46,7 @@ public static class WeatherModuleExtensions
         services.AddScoped<IQueryHandler<GetWeatherQuery, WeatherConditionDto>, GetWeatherQueryHandler>();
         services.AddScoped<ICommandHandler<StartPrecipitationCommand>, StartPrecipitationCommandHandler>();
         services.AddScoped<ICommandHandler<StartStrongWindCommand>, StartStrongWindCommandHandler>();
+        services.AddScoped<ICommandHandler<StartGodzillaCommand>, StartGodzillaCommandHandler>();
 
         // The autonomous simulation loop.
         services.AddHostedService<WeatherSimulationService>();

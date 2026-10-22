@@ -5,6 +5,7 @@ using FourDotnet.BoogaBooster.Weather.Abstractions;
 using FourDotnet.BoogaBooster.Weather.Application;
 using FourDotnet.BoogaBooster.Weather.Domain;
 using FourDotnet.BoogaBooster.Weather.Features.GetWeather;
+using FourDotnet.BoogaBooster.Weather.Features.StartGodzilla;
 using FourDotnet.BoogaBooster.Weather.Features.StartPrecipitation;
 using FourDotnet.BoogaBooster.Weather.Features.StartStrongWind;
 using Microsoft.Extensions.DependencyInjection;
@@ -52,6 +53,7 @@ public sealed class WeatherModuleExtensionsTests
         Assert.NotNull(sp.GetRequiredService<IQueryHandler<GetWeatherQuery, WeatherConditionDto>>());
         Assert.NotNull(sp.GetRequiredService<ICommandHandler<StartPrecipitationCommand>>());
         Assert.NotNull(sp.GetRequiredService<ICommandHandler<StartStrongWindCommand>>());
+        Assert.IsType<StartGodzillaCommandHandler>(sp.GetRequiredService<ICommandHandler<StartGodzillaCommand>>());
     }
 
     [Fact]

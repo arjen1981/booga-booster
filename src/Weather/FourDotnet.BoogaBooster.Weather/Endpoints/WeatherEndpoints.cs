@@ -1,6 +1,7 @@
 using FourDotnet.BoogaBooster.Core.Cqrs;
 using FourDotnet.BoogaBooster.Weather.Abstractions;
 using FourDotnet.BoogaBooster.Weather.Features.GetWeather;
+using FourDotnet.BoogaBooster.Weather.Features.StartGodzilla;
 using FourDotnet.BoogaBooster.Weather.Features.StartPrecipitation;
 using FourDotnet.BoogaBooster.Weather.Features.StartStrongWind;
 using Microsoft.AspNetCore.Builder;
@@ -58,6 +59,15 @@ public static class WeatherEndpoints
             return Results.Accepted();
         })
         .WithName("StartStrongWind");
+
+        group.MapPost("/godzilla", async (
+            ICommandHandler<StartGodzillaCommand> handler,
+            CancellationToken cancellationToken) =>
+        {
+            await handler.HandleAsync(new StartGodzillaCommand(), cancellationToken);
+            return Results.Accepted();
+        })
+        .WithName("StartGodzilla");
 
         return endpoints;
     }
