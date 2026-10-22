@@ -12,6 +12,7 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
 import { MotorDirection } from '../models/ride.models';
+import { GodzillaActor, loadGodzillaModel } from './godzilla-actor';
 
 /** Ride geometry (metres) — mirrors the reference model's parameter set. */
 const P = {
@@ -133,6 +134,9 @@ export class RideVisualization {
   readonly hubDirection = input.required<MotorDirection>();
   readonly gondolaBrakeEngaged = input.required<boolean>();
 
+  /** Whether Godzilla should be standing next to the ride; the model loads on first need. */
+  readonly godzillaPresent = input(false);
+
   private readonly hostRef = viewChild.required<ElementRef<HTMLDivElement>>('host');
   private readonly destroyRef = inject(DestroyRef);
 
@@ -189,6 +193,9 @@ export class RideVisualization {
     const reducedMotion =
       typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+    const godzilla = new GodzillaActor(loadGodzillaModel, reducedMotion);
+    scene.add(godzilla.root);
+
     const clock = new THREE.Clock();
     let mainA = 0;
     let hubA = 0;
@@ -224,6 +231,8 @@ export class RideVisualization {
           gondola.obj.rotation.y = finiteOrZero(gondola.obj.rotation.y + delta);
         }
       }
+
+      godzilla.update(dt, this.godzillaPresent());
 
       controls.update();
       renderer.render(scene, camera);
@@ -264,6 +273,7 @@ export class RideVisualization {
       resize.disconnect();
       renderer.setAnimationLoop(null);
       controls.dispose();
+      godzilla.dispose();
       this.disposeScene(scene);
       renderer.dispose();
       renderer.domElement.remove();

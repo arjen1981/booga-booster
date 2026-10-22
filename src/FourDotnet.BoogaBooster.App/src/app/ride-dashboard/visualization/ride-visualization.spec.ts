@@ -22,6 +22,16 @@ describe('RideVisualization', () => {
     expect(host.querySelector('.viz')).not.toBeNull();
   });
 
+  it('accepts the godzillaPresent input without WebGL, defaulting to false', () => {
+    const fixture = render();
+    expect(fixture.componentInstance.godzillaPresent()).toBe(false);
+
+    fixture.componentRef.setInput('godzillaPresent', true);
+    fixture.detectChanges();
+
+    expect(fixture.componentInstance.godzillaPresent()).toBe(true);
+  });
+
   it('maps rpm to radians per second', () => {
     expect(rpmToRadPerSec(60)).toBeCloseTo(2 * Math.PI, 5);
     expect(rpmToRadPerSec(0)).toBe(0);
