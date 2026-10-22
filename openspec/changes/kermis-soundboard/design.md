@@ -73,15 +73,17 @@ not by ear.
 
 ### D3. Sound catalogue as typed data
 A `SOUNDS` constant (`soundboard/sounds.ts`) lists `{ id, label, src, credit: { title,
-author, url, licence } }` for the four clips. The component and the credits popover both
+author, url, licence, licenceUrl } }` for the four clips. The component and the credits popover both
 render from it, so the UI attribution and `CREDITS.md` come from one checked list.
 
 ### D4. `AUDIO_PLAYER` token over `HTMLAudioElement`
-An `AudioPlayer` interface (`play(src): Promise<void>`, `stop()`, `ended` callback/observable)
+An `AudioPlayer` interface (`play(src): Promise<void>`, `stop()`, `onEnded(listener)` returning an unsubscribe function)
 is provided under an `AUDIO_PLAYER` `InjectionToken`. The default implementation owns **one**
 reused `HTMLAudioElement`: `play` sets `src`, resets `currentTime = 0` and calls
 `audio.play()`; `stop` pauses it. A single element makes "one sound at a time" structural
-rather than something to coordinate. Tests provide a `FakeAudioPlayer` from
+rather than something to coordinate. The default `HtmlAudioPlayer` is `providedIn: 'root'`,
+creates its element lazily, and is mapped with `{ provide: AUDIO_PLAYER, useExisting:
+HtmlAudioPlayer }`. Tests provide a `FakeAudioPlayer` from
 `soundboard/testing/` that records calls and can fire `ended` or reject `play`.
 *Alternative:* Web Audio API with decoded buffers — lower latency, but more code and
 decoding all four clips up front, for no visible benefit here.
@@ -90,15 +92,22 @@ decoding all four clips up front, for no visible benefit here.
 `playing = signal<SoundId | null>(null)`. Pressing a button: if it is the playing id →
 `stop()` and set `null`; otherwise → `play(src)` and set the id. `ended` and a rejected
 `play()` promise both reset to `null` (the rejection is caught — autoplay/decoding
-failures must not surface as unhandled errors). The audio is stopped in `DestroyRef`
+failures must not surface as unhandled errors). A rejection only resets the state if that
+sound is still the current one, so a play aborted by a later press cannot clear the newer
+sound. The audio is stopped in `DestroyRef`
 `onDestroy`.
 
-### D6. PrimeNG `ToggleButton` for sounds, `Popover` for credits
-Each sound is a `p-togglebutton` bound to `playing() === id` — it renders a native button
-with `aria-pressed`, which is exactly the spec's toggle semantics, and its checked style
-plus an on/off icon or "■/▶" glyph gives a non-colour cue. Credits sit behind a small text
+### D6. PrimeNG `pButton` toggles for sounds, `Popover` for credits
+Each sound is a native `<button pButton>` (PrimeNG `ButtonDirective`) with
+`[attr.aria-pressed]` bound to `playing() === id` — exactly the spec's toggle semantics.
+Playing is a filled primary button with a ■ glyph, idle an outlined secondary button with a
+▶ glyph (glyphs `aria-hidden`), so the state is not colour-only. *Rejected during
+implementation:* `p-togglebutton` — it is a form control that owns its checked state via
+ngModel, so it cannot be driven cleanly from a signal that also resets on `ended` and on a
+rejected `play()`. Credits sit behind a small text
 `p-button` ("Credits") opening a `p-popover` (dialog role, focus-trapped, Escape closes)
-containing a list of links. Visible labels carry `lang="nl"`; no `aria-label` overrides
+(`ariaLabel` "Sound credits") containing the list; links open in a new tab
+(`rel="noopener noreferrer"`) so the live dashboard is not navigated away. Visible labels carry `lang="nl"`; no `aria-label` overrides
 the visible text (WCAG 2.5.3 label-in-name).
 *Alternative:* hand-rolled `<button aria-pressed>` — simpler, but contradicts the PrimeNG
 mandate; `<details>` for credits — rejected because it would push the strip taller when
@@ -107,9 +116,12 @@ open, whereas the popover overlays.
 ### D7. Configure PrimeNG once, with low-impact theming
 Add `providePrimeNG({ theme: { preset: Aura, options: { darkModeSelector: … ,
 cssLayer: true } } })` to `app.config.ts`. `cssLayer` puts PrimeNG's CSS in a cascade layer
-so the app's existing styles win and current panels are unaffected. Map the primary
-colour to the dashboard's `--bb-accent` via a `definePreset` so the toggles match the
-dashboard. Consult the `primeng` MCP server for the exact v22 API before writing it.
+so the app's existing styles win and current panels are unaffected. The preset lives in
+`src/app/theme/boogabooster-preset.ts` (`definePreset(Aura, …)` with the primary palette
+generated from the dashboard accent `#4aa3ff`), and `darkModeSelector: '.bb-dark'` — a class set on
+`<html>` in `index.html` and never removed — keeps PrimeNG
+permanently dark like the dashboard. This adds ~185 kB to the initial bundle (now ~444 kB,
+under the 500 kB warning budget). Consult the `primeng` MCP server for the exact v22 API before writing it.
 
 ### D8. Layout: central column becomes a two-row grid
 `.center` changes from `place-items: center` to `grid-template-rows: minmax(0, 1fr) auto`.
