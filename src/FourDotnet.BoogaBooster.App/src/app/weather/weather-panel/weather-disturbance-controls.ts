@@ -3,8 +3,8 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { WeatherStateService } from '../state/weather-state.service';
 
 /**
- * The two operator actions that disturb the weather: start precipitation and
- * summon strong wind. Each dispatches through the weather state service, shows a
+ * The operator actions that disturb the weather: start precipitation, summon
+ * strong wind and summon Godzilla. Each dispatches through the weather state service, shows a
  * pending state on the triggering button, and surfaces a failure without
  * breaking the panel.
  */
@@ -39,6 +39,19 @@ import { WeatherStateService } from '../state/weather-state.service';
           <span class="glyph" aria-hidden="true">🌬</span>
           <span>{{ weather.strongWindPending() ? 'Summoning…' : 'Summon strong wind' }}</span>
         </button>
+
+        <button
+          type="button"
+          class="disturb-btn"
+          data-action="godzilla"
+          aria-label="Summon Godzilla"
+          [disabled]="weather.godzillaPending()"
+          [attr.aria-busy]="weather.godzillaPending()"
+          (click)="startGodzilla()"
+        >
+          <span class="glyph" aria-hidden="true">🦖</span>
+          <span>{{ weather.godzillaPending() ? 'Summoning…' : 'Summon Godzilla' }}</span>
+        </button>
       </div>
 
       @if (weather.errorMessage(); as error) {
@@ -53,7 +66,7 @@ import { WeatherStateService } from '../state/weather-state.service';
     }
     .buttons {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: repeat(auto-fit, minmax(6.5rem, 1fr));
       gap: 0.6rem;
     }
     .disturb-btn {
@@ -105,5 +118,9 @@ export class WeatherDisturbanceControls {
 
   protected startStrongWind(): void {
     void this.weather.startStrongWind();
+  }
+
+  protected startGodzilla(): void {
+    void this.weather.startGodzilla();
   }
 }

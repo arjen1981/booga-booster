@@ -10,7 +10,7 @@ describe('WeatherDisturbanceControls', () => {
   let source: FakeWeatherSource;
   let fixture: ComponentFixture<WeatherDisturbanceControls>;
 
-  function button(action: 'precipitation' | 'strong-wind'): HTMLButtonElement {
+  function button(action: 'precipitation' | 'strong-wind' | 'godzilla'): HTMLButtonElement {
     return fixture.nativeElement.querySelector(
       `.disturb-btn[data-action="${action}"]`,
     ) as HTMLButtonElement;
@@ -33,6 +33,39 @@ describe('WeatherDisturbanceControls', () => {
   it('summons strong wind when the wind button is clicked', () => {
     button('strong-wind').click();
     expect(source.strongWindCalls).toBe(1);
+  });
+
+  it('summons Godzilla when the Godzilla button is clicked', () => {
+    button('godzilla').click();
+    expect(source.godzillaCalls).toBe(1);
+  });
+
+  it('disables and marks the Godzilla button busy while pending', async () => {
+    source.hold = true;
+
+    button('godzilla').click();
+    fixture.detectChanges();
+
+    expect(button('godzilla').disabled).toBe(true);
+    expect(button('godzilla').getAttribute('aria-busy')).toBe('true');
+
+    source.release();
+    await flush();
+    fixture.detectChanges();
+
+    expect(button('godzilla').disabled).toBe(false);
+  });
+
+  it('surfaces a failed Godzilla request', async () => {
+    source.failNext = true;
+
+    button('godzilla').click();
+    await flush();
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.querySelector('[role="alert"]')?.textContent).toContain(
+      'Could not disturb the weather',
+    );
   });
 
   it('disables and marks the button busy while pending, then restores it', async () => {
@@ -66,8 +99,9 @@ describe('WeatherDisturbanceControls', () => {
     expect(button('precipitation').disabled).toBe(false);
   });
 
-  it('exposes accessible names on both buttons', () => {
+  it('exposes accessible names on all buttons', () => {
     expect(button('precipitation').getAttribute('aria-label')).toBe('Start precipitation');
     expect(button('strong-wind').getAttribute('aria-label')).toBe('Summon strong wind');
+    expect(button('godzilla').getAttribute('aria-label')).toBe('Summon Godzilla');
   });
 });
