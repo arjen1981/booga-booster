@@ -3,6 +3,7 @@ using FourDotnet.BoogaBooster.IntegrationMessages.Events.Weather;
 using FourDotnet.BoogaBooster.Weather.Abstractions;
 using FourDotnet.BoogaBooster.Weather.Application;
 using FourDotnet.BoogaBooster.Weather.Domain;
+using FourDotnet.BoogaBooster.Weather.Features.StartGodzilla;
 using FourDotnet.BoogaBooster.Weather.Features.StartPrecipitation;
 using FourDotnet.BoogaBooster.Weather.Features.StartStrongWind;
 using FourDotnet.BoogaBooster.Weather.Tests.Testing;
@@ -44,6 +45,42 @@ public sealed class WeatherPublishingTests
                 It.Is<WeatherConditionDto>(s => s.Regime == WeatherRegime.StrongWind),
                 It.IsAny<CancellationToken>()),
             Times.Once);
+    }
+
+    [Fact]
+    public async Task Summoning_godzilla_starts_it_and_publishes_a_weather_update_that_is_not_nice()
+    {
+        var store = new WeatherStore(ConstantSampler.Zero);
+        var publisher = new Mock<IWeatherUpdatePublisher>();
+        var handler = new StartGodzillaCommandHandler(store, publisher.Object);
+
+        await handler.HandleAsync(new StartGodzillaCommand(), TestContext.Current.CancellationToken);
+
+        Assert.Equal(WeatherRegime.Godzilla, store.GetSnapshot().Regime);
+        publisher.Verify(
+            p => p.PublishAsync(
+                It.Is<WeatherConditionDto>(s => s.Regime == WeatherRegime.Godzilla && s.NiceWeather == 0f),
+                It.IsAny<CancellationToken>()),
+            Times.Once);
+    }
+
+    [Fact]
+    public async Task Integration_publisher_carries_the_godzilla_regime_as_a_string_with_no_nice_weather()
+    {
+        WeatherUpdateIntegrationEvent? captured = null;
+        var inner = new Mock<IIntegrationEventPublisher>();
+        inner.Setup(p => p.PublishAsync(It.IsAny<WeatherUpdateIntegrationEvent>(), It.IsAny<CancellationToken>()))
+            .Callback((WeatherUpdateIntegrationEvent e, CancellationToken _) => captured = e)
+            .Returns(Task.CompletedTask);
+
+        var publisher = new IntegrationWeatherUpdatePublisher(inner.Object);
+        var store = new WeatherStore(ConstantSampler.Zero);
+
+        await publisher.PublishAsync(store.StartGodzilla().Snapshot, TestContext.Current.CancellationToken);
+
+        Assert.NotNull(captured);
+        Assert.Equal("Godzilla", captured!.Regime);
+        Assert.Equal(0f, captured.NiceWeather);
     }
 
     [Fact]

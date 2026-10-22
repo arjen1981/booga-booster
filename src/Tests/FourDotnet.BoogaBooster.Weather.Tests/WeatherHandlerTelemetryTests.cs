@@ -2,6 +2,7 @@ using System.Diagnostics;
 using FourDotnet.BoogaBooster.Weather.Abstractions;
 using FourDotnet.BoogaBooster.Weather.Application;
 using FourDotnet.BoogaBooster.Weather.Features.GetWeather;
+using FourDotnet.BoogaBooster.Weather.Features.StartGodzilla;
 using FourDotnet.BoogaBooster.Weather.Features.StartPrecipitation;
 using FourDotnet.BoogaBooster.Weather.Features.StartStrongWind;
 using FourDotnet.BoogaBooster.Weather.Tests.Testing;
@@ -97,6 +98,41 @@ public sealed class WeatherHandlerTelemetryTests : IDisposable
             DisturbanceCounter,
             ("weather.disturbance.kind", "strong-wind"));
         Assert.Equal(1, measurement.Value);
+    }
+
+    [Fact]
+    public async Task StartGodzilla_TagsTheConditionsItInterrupted_ThoughItCarriesNoPayload()
+    {
+        var store = new WeatherStore(ConstantSampler.Zero);
+        store.StartStrongWind();
+        var before = store.GetSnapshot();
+        var handler = new StartGodzillaCommandHandler(store, NoOpPublisher());
+
+        using (_telemetry.Scope())
+        {
+            await handler.HandleAsync(new StartGodzillaCommand(), TestContext.Current.CancellationToken);
+        }
+
+        // Read before the store is mutated: the span shows what Godzilla interrupted.
+        var activity = _telemetry.Activity("StartGodzilla");
+        Assert.Equal(nameof(WeatherRegime.StrongWind), activity.GetTagItem(RegimeTag));
+        Assert.Equal(before.NiceWeather, activity.GetTagItem(NiceWeatherTag));
+        Assert.Equal(ActivityStatusCode.Unset, activity.Status);
+    }
+
+    [Fact]
+    public async Task StartGodzilla_CountsTheDisturbance_AsGodzilla()
+    {
+        var store = new WeatherStore(ConstantSampler.Zero);
+        var handler = new StartGodzillaCommandHandler(store, NoOpPublisher());
+
+        await handler.HandleAsync(new StartGodzillaCommand(), TestContext.Current.CancellationToken);
+
+        var measurement = _telemetry.Measurement(
+            DisturbanceCounter,
+            ("weather.disturbance.kind", "godzilla"));
+        Assert.Equal(1, measurement.Value);
+        Assert.Equal(["weather.disturbance.kind"], measurement.Tags.Keys);
     }
 
     [Fact]

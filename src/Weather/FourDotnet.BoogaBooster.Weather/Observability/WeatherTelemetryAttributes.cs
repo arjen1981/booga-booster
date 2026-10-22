@@ -34,4 +34,7 @@ internal static class WeatherTelemetryAttributes
 
     /// <summary>The <see cref="DisturbanceKind"/> value for a strong-wind event.</summary>
     internal const string StrongWindDisturbance = "strong-wind";
+
+    /// <summary>The <see cref="DisturbanceKind"/> value for a Godzilla event.</summary>
+    internal const string GodzillaDisturbance = "godzilla";
 }

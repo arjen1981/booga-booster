@@ -1,6 +1,7 @@
 using FourDotnet.BoogaBooster.Weather.Abstractions;
 using FourDotnet.BoogaBooster.Weather.Application;
 using FourDotnet.BoogaBooster.Weather.Features.GetWeather;
+using FourDotnet.BoogaBooster.Weather.Features.StartGodzilla;
 using FourDotnet.BoogaBooster.Weather.Tests.Testing;
 using Moq;
 using Xunit;
@@ -85,5 +86,19 @@ public sealed class WeatherApplicationTests
 
         // The returned snapshot is the store's state, not a stale copy.
         Assert.Equal(store.GetSnapshot(), result.Snapshot);
+    }
+
+    [Fact]
+    public void StartGodzillaCommandHandler_NullStore_Throws()
+    {
+        Assert.Throws<ArgumentNullException>(
+            () => new StartGodzillaCommandHandler(null!, new NoOpWeatherUpdatePublisher()));
+    }
+
+    [Fact]
+    public void StartGodzillaCommandHandler_NullPublisher_Throws()
+    {
+        Assert.Throws<ArgumentNullException>(
+            () => new StartGodzillaCommandHandler(new WeatherStore(ConstantSampler.Zero), null!));
     }
 }
