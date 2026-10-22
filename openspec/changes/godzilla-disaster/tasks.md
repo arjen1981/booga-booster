@@ -38,6 +38,6 @@ agent. Backend paths are under `src/`, frontend paths under
 
 ## 6. Verification
 
-- [ ] 6.1 Run `dotnet build` + `dotnet test` on `BoogaBooster.slnx` and `npm test` + `npm run build` in the app; verify all green, no new build warnings, and the GLTFLoader ends up in a lazy chunk (initial bundle not grown by it)
-- [ ] 6.2 Run the system (Aspire AppHost, or API + `npm start`) and in a browser: summon Godzilla and confirm it walks in from the fog, stands roaring beside the ride without overlapping it, the weather panel shows the Godzilla scene/label and niceness 0, queue arrivals stop, and after ~3 min it walks off; confirm the other two disturbances still work
-- [ ] 6.3 Run `openspec validate godzilla-disaster --strict`; verify it passes
+- [x] 6.1 Run `dotnet build` + `dotnet test` on `BoogaBooster.slnx` and `npm test` + `npm run build` in the app; verify all green, no new build warnings, and the GLTFLoader ends up in a lazy chunk (initial bundle not grown by it)
+- [x] 6.2 Run the system (Aspire AppHost, or API + `npm start`) and in a browser: summon Godzilla and confirm it walks in from the fog, stands roaring beside the ride without overlapping it, the weather panel shows the Godzilla scene/label and niceness 0, queue arrivals stop, and after ~3 min it walks off; confirm the other two disturbances still work
+- [x] 6.3 Run `openspec validate godzilla-disaster --strict`; verify it passes
