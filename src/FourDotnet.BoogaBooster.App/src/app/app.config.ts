@@ -9,6 +9,8 @@ import { QUEUE_SOURCE } from './queue/data/queue-source';
 import { RIDE_TELEMETRY_SOURCE } from './ride-dashboard/data/ride-telemetry-source';
 import { SseRideTelemetrySource } from './ride-dashboard/data/sse-ride-telemetry-source';
 import { HttpWeatherSource } from './weather/data/http-weather-source';
+import { AUDIO_PLAYER } from './soundboard/audio-player';
+import { HtmlAudioPlayer } from './soundboard/html-audio-player';
 import { BoogaBoosterPreset } from './theme/boogabooster-preset';
 import { WEATHER_SOURCE } from './weather/data/weather-source';
 
@@ -32,5 +34,6 @@ export const appConfig: ApplicationConfig = {
     { provide: RIDE_TELEMETRY_SOURCE, useExisting: SseRideTelemetrySource },
     { provide: WEATHER_SOURCE, useExisting: HttpWeatherSource },
     { provide: QUEUE_SOURCE, useExisting: HttpQueueSource },
+    { provide: AUDIO_PLAYER, useExisting: HtmlAudioPlayer },
   ],
 };

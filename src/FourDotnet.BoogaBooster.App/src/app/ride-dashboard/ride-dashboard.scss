@@ -50,7 +50,9 @@
 
 .center {
   display: grid;
-  place-items: center;
+  /* Visualization fills the height; the soundboard takes one thin row below. */
+  grid-template-rows: minmax(0, 1fr) auto;
+  gap: 0.75rem;
   min-width: 0;
   min-height: 0;
   background: var(--bb-surface);

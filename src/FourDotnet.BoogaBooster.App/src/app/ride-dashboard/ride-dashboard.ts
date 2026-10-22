@@ -9,6 +9,7 @@ import { RideLifecycleService } from './state/ride-lifecycle.service';
 import { RideStateService } from './state/ride-state.service';
 import { RideVisualization } from './visualization/ride-visualization';
 import { QueuePanel } from '../queue/queue-panel/queue-panel';
+import { Soundboard } from '../soundboard/soundboard';
 import { WeatherPanel } from '../weather/weather-panel/weather-panel';
 
 /**
@@ -28,6 +29,7 @@ import { WeatherPanel } from '../weather/weather-panel/weather-panel';
     GondolaPanel,
     QueuePanel,
     WeatherPanel,
+    Soundboard,
   ],
   templateUrl: './ride-dashboard.html',
   styleUrl: './ride-dashboard.scss',

@@ -30,8 +30,8 @@ PrimeNG markup or configuration.
 
 ## 5. Dashboard integration
 
-- [ ] 5.1 Place `<bb-soundboard />` under `<bb-ride-visualization>` in `ride-dashboard.html` and change `.center` to a `minmax(0,1fr) auto` row grid in `ride-dashboard.scss`; verify the dashboard spec asserts the soundboard renders inside the central section after the visualization
-- [ ] 5.2 Provide the default `AUDIO_PLAYER` in `app.config.ts` and the fake in dashboard specs that render the soundboard; verify `ride-dashboard.a11y.spec.ts` passes with no violations
+- [x] 5.1 Place `<bb-soundboard />` under `<bb-ride-visualization>` in `ride-dashboard.html` and change `.center` to a `minmax(0,1fr) auto` row grid in `ride-dashboard.scss`; verify the dashboard spec asserts the soundboard renders inside the central section after the visualization
+- [x] 5.2 Provide the default `AUDIO_PLAYER` in `app.config.ts` and the fake in dashboard specs that render the soundboard; verify `ride-dashboard.a11y.spec.ts` passes with no violations
 
 ## 6. Verification
 

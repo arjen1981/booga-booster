@@ -5,6 +5,8 @@ import axe from 'axe-core';
 
 import { QUEUE_SOURCE } from '../queue/data/queue-source';
 import { createQueueStatus, FakeQueueSource } from '../queue/testing/fake-queue-source';
+import { AUDIO_PLAYER } from '../soundboard/audio-player';
+import { FakeAudioPlayer } from '../soundboard/testing/fake-audio-player';
 import { WEATHER_SOURCE } from '../weather/data/weather-source';
 import { FakeWeatherSource, createConditions } from '../weather/testing/fake-weather-source';
 import { RIDE_TELEMETRY_SOURCE } from './data/ride-telemetry-source';
@@ -40,6 +42,7 @@ describe('RideDashboard accessibility', () => {
         { provide: RIDE_TELEMETRY_SOURCE, useValue: source },
         { provide: WEATHER_SOURCE, useValue: weather },
         { provide: QUEUE_SOURCE, useValue: queue },
+        { provide: AUDIO_PLAYER, useValue: new FakeAudioPlayer() },
       ],
     });
 

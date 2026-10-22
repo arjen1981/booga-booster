@@ -7,6 +7,8 @@ import { RouterTestingHarness } from '@angular/router/testing';
 import { routes } from '../app.routes';
 import { QUEUE_SOURCE } from '../queue/data/queue-source';
 import { FakeQueueSource } from '../queue/testing/fake-queue-source';
+import { AUDIO_PLAYER } from '../soundboard/audio-player';
+import { FakeAudioPlayer } from '../soundboard/testing/fake-audio-player';
 import { WEATHER_SOURCE } from '../weather/data/weather-source';
 import { FakeWeatherSource } from '../weather/testing/fake-weather-source';
 import { RIDE_TELEMETRY_SOURCE } from './data/ride-telemetry-source';
@@ -34,6 +36,7 @@ describe('RideDashboard', () => {
         { provide: RIDE_TELEMETRY_SOURCE, useValue: source },
         { provide: WEATHER_SOURCE, useValue: new FakeWeatherSource() },
         { provide: QUEUE_SOURCE, useValue: new FakeQueueSource() },
+        { provide: AUDIO_PLAYER, useValue: new FakeAudioPlayer() },
       ],
     });
     http = TestBed.inject(HttpTestingController);
@@ -48,6 +51,16 @@ describe('RideDashboard', () => {
 
     expect(component).toBeInstanceOf(RideDashboard);
     expect(harness.routeNativeElement?.querySelector('bb-ride-visualization')).not.toBeNull();
+  });
+
+  it('renders the soundboard in the central section, after the visualization', () => {
+    const fixture = TestBed.createComponent(RideDashboard);
+    http.expectOne(TELEMETRY_URL).flush({ state: 'Idle', availableTransitions: [] });
+    fixture.detectChanges();
+    const center = (fixture.nativeElement as HTMLElement).querySelector('section.center')!;
+    const children = Array.from(center.children).map((c) => c.localName);
+
+    expect(children).toEqual(['bb-ride-visualization', 'bb-soundboard']);
   });
 
   it('redirects an unknown route to the dashboard', async () => {
