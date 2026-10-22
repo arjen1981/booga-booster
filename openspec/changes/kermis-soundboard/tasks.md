@@ -17,7 +17,7 @@ PrimeNG markup or configuration.
 
 ## 3. Soundboard logic
 
-- [ ] 3.1 Create `src/app/soundboard/sounds.ts` with the typed four-entry catalogue (id, Dutch label, src, credit) and a spec asserting the order `Draaiorgel, Booster, Kamelenrace, Kermis`, unique ids, and a complete credit (title, author, https URL, licence) for every entry
+- [x] 3.1 Create `src/app/soundboard/sounds.ts` with the typed four-entry catalogue (id, Dutch label, src, credit) and a spec asserting the order `Draaiorgel, Booster, Kamelenrace, Kermis`, unique ids, and a complete credit (title, author, https URL, licence) for every entry
 - [ ] 3.2 Create the `AudioPlayer` interface, `AUDIO_PLAYER` token and the default single-`HTMLAudioElement` implementation; verify with a spec that stubs `HTMLMediaElement.prototype.play/pause` that `play` resets `currentTime` and sets `src`, `stop` pauses, and `ended` is forwarded
 - [ ] 3.3 Create `src/app/soundboard/testing/fake-audio-player.ts` that records `play`/`stop` calls and can emit `ended` or reject `play`; verify it is used by the component specs in 4.x
 
