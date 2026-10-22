@@ -12,6 +12,7 @@ import { WeatherSource, WeatherStatus } from '../data/weather-source';
 export class FakeWeatherSource implements WeatherSource {
   readonly precipitationCalls: PrecipitationType[] = [];
   strongWindCalls = 0;
+  godzillaCalls = 0;
   refreshCount = 0;
   failNext = false;
 
@@ -51,6 +52,12 @@ export class FakeWeatherSource implements WeatherSource {
 
   async startStrongWind(): Promise<void> {
     this.strongWindCalls++;
+    await this.wait();
+    this.maybeFail();
+  }
+
+  async startGodzilla(): Promise<void> {
+    this.godzillaCalls++;
     await this.wait();
     this.maybeFail();
   }

@@ -88,6 +88,19 @@ describe('HttpWeatherSource', () => {
     http.expectOne('/api/weather').flush(DTO); // eager refresh
   });
 
+  it('posts Godzilla and refreshes', async () => {
+    const source = TestBed.inject(HttpWeatherSource);
+    http.expectOne('/api/weather').flush(DTO); // init
+
+    const done = source.startGodzilla();
+    const post = http.expectOne('/api/weather/godzilla');
+    expect(post.request.method).toBe('POST');
+    post.flush(null, { status: 202, statusText: 'Accepted' });
+    await done;
+
+    http.expectOne('/api/weather').flush(DTO); // eager refresh
+  });
+
   it('stops polling once the injector is destroyed', () => {
     TestBed.inject(HttpWeatherSource);
     http.expectOne('/api/weather').flush(DTO);

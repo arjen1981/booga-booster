@@ -28,6 +28,9 @@ export interface WeatherSource {
 
   /** Start a strong-wind event on the server. */
   startStrongWind(): Promise<void>;
+
+  /** Summon Godzilla on the server. */
+  startGodzilla(): Promise<void>;
 }
 
 /** DI token for the active {@link WeatherSource} implementation. */

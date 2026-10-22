@@ -21,7 +21,7 @@ const POLL_MS = 5000;
 /**
  * {@link WeatherSource} backed by the backend weather API. Polls `GET /weather`
  * so the panel tracks the server's autonomous drift, exposes the result as
- * signals, and posts the precipitation/strong-wind disturbances — refreshing
+ * signals, and posts the precipitation/strong-wind/Godzilla disturbances — refreshing
  * eagerly after each so the change shows without waiting for the next poll.
  */
 @Injectable({ providedIn: 'root' })
@@ -56,6 +56,11 @@ export class HttpWeatherSource implements WeatherSource {
 
   async startStrongWind(): Promise<void> {
     await firstValueFrom(this.http.post(`${WEATHER_URL}/strong-wind`, {}));
+    this.refresh();
+  }
+
+  async startGodzilla(): Promise<void> {
+    await firstValueFrom(this.http.post(`${WEATHER_URL}/godzilla`, {}));
     this.refresh();
   }
 
