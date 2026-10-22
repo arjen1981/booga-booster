@@ -163,14 +163,23 @@ public sealed class Weather : DomainModel
             || precipitationChanged;
     }
 
-    /// <summary>Projects the aggregate onto the cross-module snapshot DTO.</summary>
+    /// <summary>
+    /// Projects the aggregate onto the cross-module snapshot DTO. While Godzilla is
+    /// around the nice-weather indicator is <see cref="WeatherNiceness.NotNice"/>
+    /// whatever the readings say, so no visitor joins a queue next to a kaiju; every
+    /// consumer (read query, condition provider, published event) derives from here.
+    /// </summary>
     public WeatherConditionDto ToConditionDto() => new(
         Temperature.Celsius,
         Wind.Beaufort,
         Sunshine.Percent,
         Precipitation.Type,
         Regime,
-        WeatherNiceness.Calculate(Temperature.Celsius, Wind.Beaufort, Precipitation.Type, Precipitation.Intensity));
+        CalculateNiceWeather());
+
+    private float CalculateNiceWeather() => Regime == WeatherRegime.Godzilla
+        ? WeatherNiceness.NotNice
+        : WeatherNiceness.Calculate(Temperature.Celsius, Wind.Beaufort, Precipitation.Type, Precipitation.Intensity);
 
     private bool ExpireActiveEvent(TimeSpan elapsed)
     {

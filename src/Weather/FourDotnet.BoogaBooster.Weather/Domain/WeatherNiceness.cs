@@ -11,6 +11,9 @@ namespace FourDotnet.BoogaBooster.Weather.Domain;
 /// </summary>
 public static class WeatherNiceness
 {
+    /// <summary>The bottom of the scale: nobody wants to be outside.</summary>
+    public const float NotNice = 0f;
+
     /// <summary>Beaufort at or below which wind does not detract from niceness.</summary>
     private const double PleasantWindBeaufort = 3d;
 

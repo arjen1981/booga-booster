@@ -85,4 +85,38 @@ public sealed class WeatherNicenessTests
 
         Assert.True(calm.ToConditionDto().NiceWeather > stormy.ToConditionDto().NiceWeather);
     }
+
+    [Fact]
+    public void Godzilla_scores_exactly_zero_even_with_moderate_readings()
+    {
+        var weather = WeatherModel.CreateDefault();
+
+        weather.StartGodzilla();
+
+        var conditions = weather.ToConditionDto();
+        // The readings alone would score a perfect 1; the override is what makes it 0.
+        Assert.Equal(1f, WeatherNiceness.Calculate(
+            conditions.TemperatureCelsius, conditions.WindBeaufort, conditions.Precipitation, precipitationIntensity: 0));
+        Assert.Equal(WeatherRegime.Godzilla, conditions.Regime);
+        Assert.Equal(0f, conditions.NiceWeather);
+    }
+
+    [Fact]
+    public void Niceness_recovers_to_one_when_godzilla_leaves_at_the_calm_defaults()
+    {
+        var weather = WeatherModel.CreateDefault();
+        weather.StartGodzilla();
+
+        var ticksUntilLeaving = (int)(WeatherDefaults.GodzillaDuration / WeatherDefaults.TickInterval);
+        for (var i = 0; i < ticksUntilLeaving; i++)
+        {
+            weather.Advance(WeatherDefaults.TickInterval, ConstantSampler.Zero);
+        }
+
+        var conditions = weather.ToConditionDto();
+        Assert.Equal(WeatherRegime.Calm, conditions.Regime);
+        Assert.Equal(WeatherDefaults.DefaultTemperatureCelsius, conditions.TemperatureCelsius);
+        Assert.Equal(WeatherDefaults.DefaultWindBeaufort, conditions.WindBeaufort);
+        Assert.Equal(1f, conditions.NiceWeather);
+    }
 }
