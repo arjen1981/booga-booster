@@ -26,7 +26,7 @@ PrimeNG markup or configuration.
 - [x] 4.1 Build `bb-soundboard` (standalone, OnPush, signal `playing`, PrimeNG `p-togglebutton` per sound with `lang="nl"` labels and a non-colour playing cue, labelled `<section>` with a visually hidden heading); verify with a spec that four buttons render in the specified order
 - [x] 4.2 Implement playback toggling (start, switch, stop-on-repress, reset on `ended`, reset on rejected `play`, stop on destroy); verify with specs covering each `kermis-soundboard` spec scenario, asserting `aria-pressed` and the fake player's calls
 - [x] 4.3 Add the "Credits" `p-button` + `p-popover` rendering title, author, link and licence from the catalogue; verify with a spec that opening it shows all four credits
-- [ ] 4.4 Add `soundboard.a11y.spec.ts` running AXE idle, with a sound playing, and with credits open; verify zero violations
+- [x] 4.4 Add `soundboard.a11y.spec.ts` running AXE idle, with a sound playing, and with credits open; verify zero violations
 
 ## 5. Dashboard integration
 
